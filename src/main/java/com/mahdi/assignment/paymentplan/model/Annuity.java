@@ -5,7 +5,7 @@ import java.util.Date;
 public class Annuity {
 
     private String borrowerPaymentAmount;
-    private Date   date;
+    private String  date;
     private String initialOutstandingPrincipal;
     private String interest;
     private String principal;
@@ -14,7 +14,8 @@ public class Annuity {
     public Annuity() {
     }
 
-    public Annuity(String borrowerPaymentAmount, Date date,
+    public Annuity(String borrowerPaymentAmount,
+                   String date,
                    String initialOutstandingPrincipal,
                    String interest,
                    String principal,
@@ -35,13 +36,14 @@ public class Annuity {
         this.borrowerPaymentAmount = borrowerPaymentAmount;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
+
 
     public String getInitialOutstandingPrincipal() {
         return initialOutstandingPrincipal;
@@ -74,6 +76,8 @@ public class Annuity {
     public void setRemainingOutstandingPrincipal(String remainingOutstandingPrincipal) {
         this.remainingOutstandingPrincipal = remainingOutstandingPrincipal;
     }
+
+
     @Override
     public String toString()
     {

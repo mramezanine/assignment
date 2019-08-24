@@ -4,34 +4,34 @@ import java.util.Date;
 
 public class LoanCondition {
 
-    private String loanAmount;
-    private String nominalRate;
+    private float loanAmount;
+    private float nominalRate;
     private int duration;
     private Date startDate;
 
     public LoanCondition() {
     }
 
-    public LoanCondition(String loanAmount, String nominalRate, int duration, Date startDate) {
+    public LoanCondition(float loanAmount, float nominalRate, int duration, Date startDate) {
         this.loanAmount = loanAmount;
         this.nominalRate = nominalRate;
         this.duration = duration;
         this.startDate = startDate;
     }
 
-    public String getLoanAmount() {
+    public float getLoanAmount() {
         return loanAmount;
     }
 
-    public void setLoanAmount(String loanAmount) {
+    public void setLoanAmount(float loanAmount) {
         this.loanAmount = loanAmount;
     }
 
-    public String getNominalRate() {
+    public float getNominalRate() {
         return nominalRate;
     }
 
-    public void setNominalRate(String nominalRate) {
+    public void setNominalRate(float nominalRate) {
         this.nominalRate = nominalRate;
     }
 

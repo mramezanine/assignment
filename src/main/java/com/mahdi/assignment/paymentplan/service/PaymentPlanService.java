@@ -5,28 +5,98 @@ import com.mahdi.assignment.paymentplan.model.LoanCondition;
 import org.springframework.stereotype.Service;
 
 
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 @Service
 public class PaymentPlanService {
+    final int daysinMonth = 30;
+    final int daysInyear=360;
+
+
     public List<Annuity> calculatePlan(LoanCondition loanCondition){
-        List<Annuity> result = Arrays.asList(
-                new Annuity("5000.0",
-                        new Date(),
-                        "5.0",
-                        "10.0",
-                        "200.0",
-                        "10.0") ,
-                new Annuity("1000.0",
-                        new Date(),
-                        "10.0",
-                        "2.0",
-                        "20.0",
-                        "20.0")
-        );
+        System.out.println(loanCondition);
+
+
+        return createPlan(loanCondition);
+    }
+
+    private boolean isLoanConditionValid(LoanCondition loanCondition){
+        if (loanCondition.getDuration() == 0)
+            return false;
+        return true;
+    }
+    private float calulateRatePerPeriod(float nominalRate){
+        return nominalRate/1200;
+    }
+
+    private float calulateAnnuity(float loanAmount,float ratePerPeriod, int duration){
+        float result =  (float) ((loanAmount*ratePerPeriod)/(1-Math.pow((1+ratePerPeriod),-duration)));
+        result = getRounded2DecFloat(result);
         return result;
     }
+    private float calculateInterest (float nominalRate ,float OutstandinPrincipal) {
+        return getRounded2DecFloat((nominalRate * daysinMonth * OutstandinPrincipal) /(daysInyear*100));
+
+    }
+    private List<Annuity> createPlan(LoanCondition loanCondition){
+        List<Annuity> result = new ArrayList<>();
+        float brrowerPaymentAmount = 0.0f;
+        if (isLoanConditionValid(loanCondition)){
+                brrowerPaymentAmount =calulateAnnuity(loanCondition.getLoanAmount(),
+                                                calulateRatePerPeriod(loanCondition.getNominalRate()),
+                                                loanCondition.getDuration()
+                                                );
+
+            float remainingOutstandingPrincipal =loanCondition.getLoanAmount();
+
+            for (int i = 0; i < loanCondition.getDuration()  ; i++){
+
+                float interest = calculateInterest(loanCondition.getNominalRate(),remainingOutstandingPrincipal);
+                float principal = (brrowerPaymentAmount - interest);
+                remainingOutstandingPrincipal = remainingOutstandingPrincipal - principal;
+
+                if (i == loanCondition.getDuration()-1){
+                    brrowerPaymentAmount = getRounded2DecFloat(brrowerPaymentAmount + remainingOutstandingPrincipal);
+                    remainingOutstandingPrincipal = 0;
+                }
+                result.add(new Annuity(brrowerPaymentAmount+"",
+                        addSpecificMonth(loanCondition.getStartDate(),i),
+                        getRounded2DecFloat(remainingOutstandingPrincipal+principal)+"",
+                        getRounded2DecFloat(interest)+"",
+                        getRounded2DecFloat(principal)+"",
+                        getRounded2DecFloat(remainingOutstandingPrincipal)+""
+                ));
+            }
+
+        }
+        return result;
+    }
+
+    private float getRounded2DecFloat(float f){
+        return Math.round(f*100.0f)/100.0f;
+    }
+
+    private String addSpecificMonth(Date refranceDate,int monthToAdd){
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(refranceDate);
+        cal.add(Calendar.MONTH,monthToAdd);
+
+        Date newDate = cal.getTime();
+        return convertToDateFormat(newDate);
+
+    }
+
+
+    private String convertToDateFormat(Date date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T00:00:01Z'");
+        return dateFormat.format(date);
+    }
+
+
 
 }
