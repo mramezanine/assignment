@@ -22,6 +22,8 @@ public class PaymentPlanService {
     private boolean isLoanConditionValid(LoanCondition loanCondition){
         if (loanCondition.getDuration() == 0)
             return false;
+        if (loanCondition.getNominalRate() < 0.0009 && loanCondition.getNominalRate() != 0)
+            return false;
         return true;
     }
     private float calulateRatePerPeriod(float nominalRate){
@@ -77,7 +79,7 @@ public class PaymentPlanService {
 
         }
         else{
-            throw new DurationNotValidException("Duration is not valid.");
+            throw new DurationNotValidException("Input data is not valid. Please check Duration/NominalRate");
         }
         return result;
     }
