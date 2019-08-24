@@ -1,5 +1,7 @@
 package com.mahdi.assignment.paymentplan.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class LoanCondition {
@@ -7,6 +9,7 @@ public class LoanCondition {
     private float loanAmount;
     private float nominalRate;
     private int duration;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Date startDate;
 
     public LoanCondition() {

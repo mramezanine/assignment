@@ -18,8 +18,7 @@ public class PaymentPlanController {
     PaymentPlanService paymentPlanService;
 
     @PostMapping
-    public List<Annuity> calculatePlan(@RequestBody LoanCondition loanCondition){
-
+    public List<Annuity> calculatePlan(@RequestBody LoanCondition loanCondition) throws Exception {
         return paymentPlanService.calculatePlan(loanCondition);
     }
 

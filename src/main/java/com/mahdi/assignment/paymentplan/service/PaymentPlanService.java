@@ -1,15 +1,13 @@
 package com.mahdi.assignment.paymentplan.service;
 
+import com.mahdi.assignment.paymentplan.exeptions.DurationNotValidException;
 import com.mahdi.assignment.paymentplan.model.Annuity;
 import com.mahdi.assignment.paymentplan.model.LoanCondition;
 import org.springframework.stereotype.Service;
 
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PaymentPlanService {
@@ -17,10 +15,7 @@ public class PaymentPlanService {
     final int daysInyear=360;
 
 
-    public List<Annuity> calculatePlan(LoanCondition loanCondition){
-        System.out.println(loanCondition);
-
-
+    public List<Annuity> calculatePlan(LoanCondition loanCondition) throws Exception {
         return createPlan(loanCondition);
     }
 
@@ -49,10 +44,11 @@ public class PaymentPlanService {
         return getRounded2DecFloat((nominalRate * daysinMonth * OutstandinPrincipal) /(daysInyear*100));
 
     }
-    private List<Annuity> createPlan(LoanCondition loanCondition){
+    private List<Annuity> createPlan(LoanCondition loanCondition) throws Exception {
         List<Annuity> result = new ArrayList<>();
         float brrowerPaymentAmount = 0.0f;
-        if (isLoanConditionValid(loanCondition)){
+        if (isLoanConditionValid(loanCondition))
+        {
                 brrowerPaymentAmount =calulateAnnuity(loanCondition.getLoanAmount(),
                                                 calulateRatePerPeriod(loanCondition.getNominalRate()),
                                                 loanCondition.getDuration()
@@ -79,6 +75,9 @@ public class PaymentPlanService {
                 ));
             }
 
+        }
+        else{
+            throw new DurationNotValidException("Duration is not valid.");
         }
         return result;
     }
