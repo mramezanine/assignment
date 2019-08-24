@@ -34,8 +34,15 @@ public class PaymentPlanService {
     }
 
     private float calulateAnnuity(float loanAmount,float ratePerPeriod, int duration){
-        float result =  (float) ((loanAmount*ratePerPeriod)/(1-Math.pow((1+ratePerPeriod),-duration)));
-        result = getRounded2DecFloat(result);
+        float result = 0f;
+        if (ratePerPeriod == 0){
+            result = loanAmount / duration ;
+        }
+        else{
+            result =  (float) ((loanAmount*ratePerPeriod)/(1-Math.pow((1+ratePerPeriod),-duration)));
+            result = getRounded2DecFloat(result);
+        }
+
         return result;
     }
     private float calculateInterest (float nominalRate ,float OutstandinPrincipal) {
