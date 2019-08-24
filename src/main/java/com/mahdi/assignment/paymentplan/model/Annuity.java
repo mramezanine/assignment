@@ -1,6 +1,5 @@
 package com.mahdi.assignment.paymentplan.model;
 
-import java.util.Date;
 
 public class Annuity {
 
