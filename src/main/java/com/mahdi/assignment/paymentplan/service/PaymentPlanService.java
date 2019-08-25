@@ -51,7 +51,6 @@ public class PaymentPlanService {
         float brrowerPaymentAmount = 0.0f;
         if (isLoanConditionValid(loanCondition))
         {
-            System.out.println("calulateRatePerPeriod(loanCondition.getNominalRate())="+calulateRatePerPeriod(loanCondition.getNominalRate()));
             brrowerPaymentAmount =calulateAnnuity(loanCondition.getLoanAmount(),
                                                 calulateRatePerPeriod(loanCondition.getNominalRate()),
                                                 loanCondition.getDuration()
