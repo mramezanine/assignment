@@ -51,7 +51,8 @@ public class PaymentPlanService {
         float brrowerPaymentAmount = 0.0f;
         if (isLoanConditionValid(loanCondition))
         {
-                brrowerPaymentAmount =calulateAnnuity(loanCondition.getLoanAmount(),
+            System.out.println("calulateRatePerPeriod(loanCondition.getNominalRate())="+calulateRatePerPeriod(loanCondition.getNominalRate()));
+            brrowerPaymentAmount =calulateAnnuity(loanCondition.getLoanAmount(),
                                                 calulateRatePerPeriod(loanCondition.getNominalRate()),
                                                 loanCondition.getDuration()
                                                 );
@@ -65,7 +66,11 @@ public class PaymentPlanService {
                 remainingOutstandingPrincipal = remainingOutstandingPrincipal - principal;
 
                 if (i == loanCondition.getDuration()-1){
-                    brrowerPaymentAmount = getRounded2DecFloat(brrowerPaymentAmount + remainingOutstandingPrincipal);
+                    float pVofAnnuity = calculatePVofAnnuity(brrowerPaymentAmount,
+                                                            calulateRatePerPeriod(loanCondition.getNominalRate()),
+                                                            loanCondition.getDuration());
+
+                    brrowerPaymentAmount = getRounded2DecFloat(brrowerPaymentAmount + loanCondition.getLoanAmount() - pVofAnnuity);
                     remainingOutstandingPrincipal = 0;
                 }
                 result.add(new Annuity(brrowerPaymentAmount+"",
@@ -103,6 +108,10 @@ public class PaymentPlanService {
     private String convertToDateFormat(Date date){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T00:00:01Z'");
         return dateFormat.format(date);
+    }
+
+    private float calculatePVofAnnuity(float annuityAmout,float ratePerPeriod,int duration){
+        return (float) (annuityAmout*((1-Math.pow(1+ratePerPeriod,-duration))/ratePerPeriod));
     }
 
 
