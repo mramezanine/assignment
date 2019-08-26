@@ -1,7 +1,5 @@
 package com.mahdi.assignment.paymentplan;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mahdi.assignment.paymentplan.conroller.PaymentPlanController;
 import com.mahdi.assignment.paymentplan.model.Annuity;
 import com.mahdi.assignment.paymentplan.model.LoanCondition;
@@ -15,16 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -91,7 +84,7 @@ public class PaymentPlanControllerTest {
 
                                     );
 
-        String examplePlanJson ="[{" +
+        String sampleResultJSON ="[{" +
                                         "\"borrowerPaymentAmount\":\"1000.0\"," +
                                         "\"date\":\"2018-01-01T00:00:01Z\"," +
                                         "\"initialOutstandingPrincipal\":\"5000.0\"," +
@@ -134,7 +127,7 @@ public class PaymentPlanControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(content().string(examplePlanJson));
+                .andExpect(content().string(sampleResultJSON));
     }
 
     private String addSpecificMonth(Date refranceDate,int monthToAdd){
